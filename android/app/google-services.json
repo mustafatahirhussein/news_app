@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "259471957525",
+    "project_id": "newsappjawanpakistan-59f0d",
+    "storage_bucket": "newsappjawanpakistan-59f0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259471957525:android:37ec28d2389a0aa65f781c",
+        "android_client_info": {
+          "package_name": "com.app.news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259471957525-uio01vvur30vc1cees66bpoue47r6ltg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp8QDvo0i1tYlcjHl3b_zCxfrxjnTpLc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259471957525-uio01vvur30vc1cees66bpoue47r6ltg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
