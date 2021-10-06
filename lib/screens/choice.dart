@@ -10,6 +10,12 @@ class Choice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var style = TextStyle(
+      color: Color(0xffffffff),
+    );
+
+
     return Scaffold(
       backgroundColor: const Color(0xff260666),
       body: Stack(
@@ -26,7 +32,7 @@ class Choice extends StatelessWidget {
                         builder: (context) => const MainSection()),
                     (Route<dynamic> route) => false);
               },
-              child: Text("Skip"),
+              child: Text("Skip",style: style,),
             ),
           ),
           Center(
@@ -39,6 +45,11 @@ class Choice extends StatelessWidget {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => const Login()),
                         (Route<dynamic> route) => false);
+
+
+
+
+
                   },
                   child: Text("Sign in"),
                 ),
@@ -48,6 +59,8 @@ class Choice extends StatelessWidget {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => const SignUp()),
                         (Route<dynamic> route) => false);
+
+
                   },
                   child: Text("Sign up"),
                 ),
