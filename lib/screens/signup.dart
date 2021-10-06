@@ -136,12 +136,17 @@ class _SignUpState extends State<SignUp> {
                         )),
                       ),
                     )
-                  : ClipOval(
-                      child: Image.file(
-                        image,
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
+                  : InkWell(
+                      onTap: () {
+                        loadImage(context);
+                      },
+                      child: ClipOval(
+                        child: Image.file(
+                          image,
+                          height: 100,
+                          width: 100,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
               TextFormField(
@@ -250,12 +255,13 @@ class _SignUpState extends State<SignUp> {
       "payment": paymentOpt,
       "image": url,
     };
-    FirebaseFirestore.instance.collection("Users").add(data).then((value) async {
-      sharedPreferences =
-          await SharedPreferences.getInstance();
+    FirebaseFirestore.instance
+        .collection("Users")
+        .add(data)
+        .then((value) async {
+      sharedPreferences = await SharedPreferences.getInstance();
 
-      sharedPreferences.setString(
-          "col_id", value.id);
+      sharedPreferences.setString("col_id", value.id);
 
       print(value.id);
     });
@@ -266,7 +272,7 @@ class _SignUpState extends State<SignUp> {
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const Login()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
 }

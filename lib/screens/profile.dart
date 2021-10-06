@@ -2,13 +2,18 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
+import 'package:news_app_jawan_pakistan/screens/bottomnav.dart';
+import 'package:news_app_jawan_pakistan/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
+
+import 'login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key key}) : super(key: key);
@@ -20,14 +25,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   SharedPreferences sharedPreferences;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   var email = TextEditingController();
   var username = TextEditingController();
   var address = TextEditingController();
   var cnt = TextEditingController();
-
-  String paymentOpt = "Cash";
-  var items = ["Cash", "Credit", "Debit", "Cheque"];
+  var pay = TextEditingController();
 
   File image;
   String url = "";
@@ -102,14 +106,14 @@ class _ProfileState extends State<Profile> {
 
     sharedPreferences = await SharedPreferences.getInstance();
 
-    String userID = sharedPreferences.getString("col_id");
+    String userID = sharedPreferences.getString("uid");
 
-    if (userID.isNotEmpty) {
-      final DocumentReference document =
-          firebaseFirestore.collection("Users").doc(userID);
+    //Document ID
+    String colID = sharedPreferences.getString("col_id");
 
+    if (userID != null) {
       return StreamBuilder(
-        stream: firebaseFirestore.collection("Users").doc(userID).snapshots(),
+        stream: firebaseFirestore.collection("Users").doc(colID).snapshots(),
         builder: (context, s) {
           if (s.hasData) {
             username.text = s.data["username"];
@@ -117,97 +121,127 @@ class _ProfileState extends State<Profile> {
             address.text = s.data["address"];
             cnt.text = s.data["cnt"];
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                s.data["image"] == null
-                    ? InkWell(
-                        onTap: () {
-                          loadImage(context);
-                        },
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppTheme.color,
+            pay.text = s.data["payment"];
+
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  s.data["image"] == null
+                      ? InkWell(
+                          onTap: () {
+                            loadImage(context);
+                          },
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppTheme.color,
+                            ),
+                            child: Center(
+                                child: Text(
+                              "image",
+                              style: style,
+                            )),
                           ),
-                          child: Center(
-                              child: Text(
-                            "image",
-                            style: style,
-                          )),
-                        ),
-                      )
-                    : ClipOval(
-                        child: Image.network(
-                          s.data["image"],
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                TextFormField(
-                  controller: username,
-                  decoration: InputDecoration(
-                    labelText: 'Username',
+                        )
+                      : image == null
+                          ? InkWell(
+                              onTap: () {
+                                loadImage(context);
+                              },
+                              child: ClipOval(
+                                child: Image.network(
+                                  s.data["image"],
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          : InkWell(
+                              onTap: () {
+                                loadImage(context);
+                              },
+                              child: ClipOval(
+                                child: Image.file(
+                                  image,
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                  TextFormField(
+                    controller: username,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                    ),
+                    validator: (val) => val.isEmpty ? "Empty" : null,
                   ),
-                  validator: (val) => val.isEmpty ? "Empty" : null,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: email,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
+                  SizedBox(
+                    height: 20,
                   ),
-                  validator: (val) => val.isEmpty ? "Empty" : null,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: address,
-                  decoration: InputDecoration(
-                    labelText: 'Address',
+                  TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                    ),
+                    validator: (val) => val.isEmpty ? "Empty" : null,
                   ),
-                  validator: (val) => val.isEmpty ? "Empty" : null,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: cnt,
-                  decoration: InputDecoration(
-                    labelText: 'Contact',
+                  SizedBox(
+                    height: 20,
                   ),
-                  validator: (val) => val.isEmpty ? "Empty" : null,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                DropdownButton(
-                  value: paymentOpt,
-                  items: items.map((e) {
-                    return DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    );
-                  }).toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      s.data["payment"] = paymentOpt;
-                    });
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    updateProfile(s.data["image"],s.data["payment"]);
-                  },
-                  child: Text("Update"),
-                ),
-              ],
+                  TextFormField(
+                    controller: address,
+                    decoration: InputDecoration(
+                      labelText: 'Address',
+                    ),
+                    validator: (val) => val.isEmpty ? "Empty" : null,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: cnt,
+                    decoration: InputDecoration(
+                      labelText: 'Contact',
+                    ),
+                    validator: (val) => val.isEmpty ? "Empty" : null,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: pay,
+                    decoration: InputDecoration(
+                      labelText: 'Payment Type',
+                    ),
+                    validator: (val) => val.isEmpty ? "Empty" : null,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      updateProfile(s.data["image"], s.data["payment"]);
+                    },
+                    child: Text("Update"),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.light),
+                    onPressed: () async {
+                      sharedPreferences = await SharedPreferences.getInstance();
+
+                      sharedPreferences.remove("uid");
+                      await auth.signOut();
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const MainSection()),
+                          (Route<dynamic> route) => false);
+                    },
+                  ),
+                ],
+              ),
             );
           }
           return Center(
@@ -216,9 +250,28 @@ class _ProfileState extends State<Profile> {
         },
       );
     }
-    if (userID.isEmpty) {
+    if (userID == null) {
       return Center(
-        child: Text("You have not registered!!"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("You have not registered!!\nSign up or Login"),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Login()));
+              },
+              child: Text("Sign in"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const SignUp()));
+              },
+              child: Text("Sign Up"),
+            ),
+          ],
+        ),
       );
     }
   }
@@ -237,7 +290,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  updateProfile(String image,String pay) async {
+  updateProfile(String image, String payment) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
     String userID = sharedPreferences.getString("col_id");
@@ -245,7 +298,7 @@ class _ProfileState extends State<Profile> {
     Map<String, dynamic> update = {
       "image": url.isEmpty ? image : url,
       "address": address.text,
-      "payment": pay,
+      "payment": pay.text.isEmpty ? payment : pay.text,
       "cnt": cnt.text,
       "username": username.text,
     };

@@ -8,7 +8,7 @@ class AboutApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("About"),
+        child: Text("News App\nPreRequisite Hackathon by Jawan Pakistan"),
       ),
     );
   }
