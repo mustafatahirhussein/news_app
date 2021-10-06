@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 
 class Favourites extends StatefulWidget {
-  const Favourites({Key key}) : super(key: key);
+  final VoidCallback onP1Badge;
+
+  const Favourites({Key key,this.onP1Badge}) : super(key: key);
 
   @override
   _FavouritesState createState() => _FavouritesState();

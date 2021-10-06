@@ -6,8 +6,9 @@ import 'package:news_app_jawan_pakistan/model_class/news_model.dart';
 class NewsInfo extends StatelessWidget {
 
   final Article article;
+  final int index;
 
-  const NewsInfo({Key key,this.article}) : super(key: key);
+  const NewsInfo({Key key,this.article,this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class NewsInfo extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppTheme.color,
         centerTitle: true,
-        title: Text("Top Stories"),
+        title: Text(index == 0 ? "Top Stories" : "News"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -35,7 +36,7 @@ class NewsInfo extends StatelessWidget {
 
             Align(
               alignment: Alignment.topRight,
-              child: Text("By "+ article.author,style: style.copyWith(fontSize: 12),),
+              child: Text(article.author== null ? '' : "By "+ article.author,style: style.copyWith(fontSize: 12),),
             ),
 
 
@@ -62,7 +63,7 @@ class NewsInfo extends StatelessWidget {
               ],
             ),
 
-            Text(article.content),
+            Text(article.content == null ? '' : article.content),
 
             Align(
               alignment: Alignment.bottomCenter,

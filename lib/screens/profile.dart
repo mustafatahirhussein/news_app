@@ -293,7 +293,7 @@ class _ProfileState extends State<Profile> {
   updateProfile(String image, String payment) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    String userID = sharedPreferences.getString("col_id");
+    String colID = sharedPreferences.getString("col_id");
 
     Map<String, dynamic> update = {
       "image": url.isEmpty ? image : url,
@@ -303,7 +303,7 @@ class _ProfileState extends State<Profile> {
       "username": username.text,
     };
 
-    firebaseFirestore.collection("Users").doc(userID).update(update);
+    firebaseFirestore.collection("Users").doc(colID).update(update);
 
     Fluttertoast.showToast(msg: "Profile updated successfully!");
   }

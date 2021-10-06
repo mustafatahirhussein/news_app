@@ -8,6 +8,7 @@ import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
 import 'package:news_app_jawan_pakistan/model_class/news_model.dart';
 import 'package:news_app_jawan_pakistan/screens/news_detail.dart';
+import 'package:news_app_jawan_pakistan/screens/search.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -17,6 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future stories,news;
+
   getNews() async {
     try {
       http.Response response = await http.get(Uri.parse(
@@ -48,6 +51,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    stories = getTopStories();
+    news = getNews();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var style = TextStyle(
       fontSize: 15,
@@ -68,7 +79,10 @@ class _HomePageState extends State<HomePage> {
             actions: [
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SearchNews()));
+                },
               ),
               PopupMenuButton<int>(
                 onSelected: (item) => handleClick(item),
@@ -94,7 +108,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             //Top Stories
             FutureBuilder<dynamic>(
-              future: getTopStories(),
+              future: stories,
               builder: (context, s) {
                 if (s.connectionState == ConnectionState.done) {
                   var data = s.data.articles;
@@ -134,19 +148,23 @@ class _HomePageState extends State<HomePage> {
                                       style: style.copyWith(fontSize: 9),
                                     ),
                                   ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
                                   Align(
                                     alignment: Alignment.topRight,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.favorite,
-                                        size: 14,
-                                      ),
-                                      onPressed: () {
-                                        favList.add(s.data[i]);
+                                    child: InkWell(
+                                      onTap: () {
+                                        favList.add(data[i]);
                                         setState(() {
                                           favCount++;
                                         });
                                       },
+                                      child: Icon(
+                                        Icons.favorite,
+                                        size: 20,
+                                        color: AppTheme.color,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -156,6 +174,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NewsInfo(
+                                  index: 0,
                                       article: s.data.articles[i],
                                     )));
                           },
@@ -172,7 +191,7 @@ class _HomePageState extends State<HomePage> {
 
             //News
             FutureBuilder<dynamic>(
-              future: getNews(),
+              future: news,
               builder: (context, s) {
                 if (s.connectionState == ConnectionState.done) {
                   var data = s.data.articles;
@@ -197,20 +216,50 @@ class _HomePageState extends State<HomePage> {
                                 data[i].title,
                                 style: style,
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  (-data[i].publishedAt.difference(now).inHours)
+
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      (-data[i]
+                                          .publishedAt
+                                          .difference(now)
+                                          .inHours)
                                           .toString() +
-                                      " hrs ago",
-                                  style: style.copyWith(fontSize: 9),
-                                ),
+                                          " hrs ago",
+                                      style: style.copyWith(fontSize: 9),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                      onTap: () {
+                                        favList.add(data[i]);
+                                        setState(() {
+                                          favCount++;
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.favorite,
+                                        size: 20,
+                                        color: AppTheme.color,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NewsInfo(
+                                  index: 1,
                                       article: s.data.articles[i],
                                     )));
                           },
