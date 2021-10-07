@@ -1,12 +1,11 @@
 //@dart=2.9
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
 import 'package:news_app_jawan_pakistan/model_class/news_model.dart';
+import 'package:news_app_jawan_pakistan/screens/drawer.dart';
 import 'package:news_app_jawan_pakistan/screens/news_detail.dart';
 import 'package:news_app_jawan_pakistan/screens/search.dart';
 
@@ -18,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future stories,news;
+  Future stories, news;
 
   getNews() async {
     try {
@@ -60,7 +59,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var style = TextStyle(
+    var style = const TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.bold,
     );
@@ -69,29 +68,29 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        drawer: Drawer(),
+        drawer: const DrawerContent(),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(100),
           child: AppBar(
             backgroundColor: AppTheme.color,
             centerTitle: true,
-            title: Text("News App"),
+            title: const Text("News App"),
             actions: [
               IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SearchNews()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const SearchNews()));
                 },
               ),
               PopupMenuButton<int>(
                 onSelected: (item) => handleClick(item),
                 itemBuilder: (context) => [
-                  PopupMenuItem<int>(value: 0, child: Text('Exit')),
+                  const PopupMenuItem<int>(value: 0, child: Text('Exit App')),
                 ],
               ),
             ],
-            bottom: TabBar(
+            bottom: const TabBar(
               indicatorColor: Color(0xffffffff),
               tabs: [
                 Tab(
@@ -122,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                         elevation: 4,
                         child: ListTile(
                           leading: Image.network(
-                            data[i].urlToImage,
+                            data[i].urlToImage ?? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
                             height: 100,
                             width: 100,
                             fit: BoxFit.cover,
@@ -148,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                                       style: style.copyWith(fontSize: 9),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 12,
                                   ),
                                   Align(
@@ -156,11 +155,12 @@ class _HomePageState extends State<HomePage> {
                                     child: InkWell(
                                       onTap: () {
                                         favList.add(data[i]);
+
                                         setState(() {
                                           favCount++;
                                         });
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.favorite,
                                         size: 20,
                                         color: AppTheme.color,
@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NewsInfo(
-                                  index: 0,
+                                      index: 0,
                                       article: s.data.articles[i],
                                     )));
                           },
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                         elevation: 4,
                         child: ListTile(
                           leading: Image.network(
-                            data[i].urlToImage,
+                            data[i].urlToImage ?? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
                             height: 100,
                             width: 100,
                             fit: BoxFit.cover,
@@ -216,8 +216,6 @@ class _HomePageState extends State<HomePage> {
                                 data[i].title,
                                 style: style,
                               ),
-
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -225,15 +223,15 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.bottomRight,
                                     child: Text(
                                       (-data[i]
-                                          .publishedAt
-                                          .difference(now)
-                                          .inHours)
-                                          .toString() +
+                                                  .publishedAt
+                                                  .difference(now)
+                                                  .inHours)
+                                              .toString() +
                                           " hrs ago",
                                       style: style.copyWith(fontSize: 9),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 12,
                                   ),
                                   Align(
@@ -245,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                                           favCount++;
                                         });
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.favorite,
                                         size: 20,
                                         color: AppTheme.color,
@@ -259,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NewsInfo(
-                                  index: 1,
+                                      index: 1,
                                       article: s.data.articles[i],
                                     )));
                           },

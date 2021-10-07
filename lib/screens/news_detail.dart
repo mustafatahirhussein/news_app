@@ -13,7 +13,7 @@ class NewsInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var style = TextStyle(
+    var style = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.normal,
     );
@@ -28,7 +28,7 @@ class NewsInfo extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(article.urlToImage,width: double.infinity,height: 270,fit: BoxFit.cover,),
+            Image.network(article.urlToImage ?? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",width: double.infinity,height: 270,fit: BoxFit.cover,),
             Text(article.description,style: style.copyWith(fontSize: 13),),
 
 
@@ -55,7 +55,7 @@ class NewsInfo extends StatelessWidget {
                   child: Container(
                     height: 20,
                     width: 2,
-                    color: Color(0xff000000),
+                    color: const Color(0xff000000),
                   ),
                 ),
 
@@ -63,7 +63,7 @@ class NewsInfo extends StatelessWidget {
               ],
             ),
 
-            Text(article.content == null ? '' : article.content),
+            Text(article.content ?? ''),
 
             Align(
               alignment: Alignment.bottomCenter,

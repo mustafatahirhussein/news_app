@@ -11,7 +11,7 @@ class Choice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var style = TextStyle(
+    var style = const TextStyle(
       color: Color(0xffffffff),
     );
 
@@ -26,11 +26,17 @@ class Choice extends StatelessWidget {
             alignment: Alignment.topRight,
             child: TextButton(
               onPressed: () {
-                saveBool();
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const MainSection()),
-                    (Route<dynamic> route) => false);
+                // saveBool();
+                // Navigator.of(context).pushAndRemoveUntil(
+                //     MaterialPageRoute(
+                //         builder: (context) => const MainSection()),
+                //     (Route<dynamic> route) => false);
+
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MainSection()),
+                );
+
               },
               child: Text("Skip",style: style,),
             ),
@@ -41,28 +47,34 @@ class Choice extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    saveBool();
-                    Navigator.of(context).pushAndRemoveUntil(
+                    // saveBool();
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //     MaterialPageRoute(builder: (context) => const Login()),
+                    //     (Route<dynamic> route) => false);
+
+                    Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => const Login()),
-                        (Route<dynamic> route) => false);
-
-
+                         );
 
 
 
                   },
-                  child: Text("Sign in"),
+                  child: const Text("Sign in"),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    saveBool();
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                        (Route<dynamic> route) => false);
+                    // saveBool();
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //     MaterialPageRoute(builder: (context) => const SignUp()),
+                    //     (Route<dynamic> route) => false);
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const SignUp()),
+                    );
 
 
                   },
-                  child: Text("Sign up"),
+                  child: const Text("Sign up"),
                 ),
               ],
             ),
