@@ -6,7 +6,15 @@ class AppTheme {
 
 
   static TextStyle splashStyle = const TextStyle(
-    fontSize: 17,
+    fontSize: 45,
+    fontWeight: FontWeight.w500,
     color:  Color(0xffffffff),
+    fontFamily: 'Dosis'
+  );
+
+  static TextStyle btnStyle = const TextStyle(
+      fontWeight: FontWeight.w100,
+      color:  Color(0xffffffff),
+      fontFamily: 'Dosis'
   );
 }

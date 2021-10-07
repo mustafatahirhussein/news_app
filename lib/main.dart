@@ -45,13 +45,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-// News API website
-//
-// Cred
-// Mustafa
-//
-// Pass test_news_api
-//
-// API key
-// 51bd3998ac014735ba523e957b32e3c1

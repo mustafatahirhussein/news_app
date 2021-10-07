@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +20,8 @@ class _DrawerContentState extends State<DrawerContent> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   getCurrentUser() async {
-    var style = const TextStyle(fontSize: 18);
+    var style =
+        AppTheme.splashStyle.copyWith(color: Colors.black, fontSize: 17);
 
     sharedPreferences = await SharedPreferences.getInstance();
 
@@ -75,13 +78,7 @@ class _DrawerContentState extends State<DrawerContent> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton.icon(
-                        icon: const Icon(
-                          Icons.lightbulb,
-                          color: Color(0xffffffff),
-                          size: 50,
-                        ),
-                        label: const Text('LogOut'),
+                      child: AppButton(
                         onPressed: () async {
                           sharedPreferences =
                               await SharedPreferences.getInstance();
@@ -93,11 +90,7 @@ class _DrawerContentState extends State<DrawerContent> {
                               msg: "Signed Out Successfully!");
                           Navigator.pop(context);
                         },
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            primary: Colors.red),
+                        text: "LogOut",
                       ),
                     ),
                   ],

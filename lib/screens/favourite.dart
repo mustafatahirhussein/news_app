@@ -1,5 +1,6 @@
 //@dart=2.9
 import 'package:flutter/material.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
 import 'package:news_app_jawan_pakistan/screens/login.dart';
@@ -34,8 +35,12 @@ class _FavouritesState extends State<Favourites> {
 
     if (userID != "null") {
       return favList.isEmpty
-          ? const Center(
-              child: Text("You have not added any favorites"),
+          ? Center(
+              child: Text(
+                "You have not added any favorites!!",
+                style: AppTheme.splashStyle
+                    .copyWith(color: Colors.black, fontSize: 18),
+              ),
             )
           : ListView.builder(
               itemCount: favList.length,
@@ -86,20 +91,30 @@ class _FavouritesState extends State<Favourites> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("You have not registered!!\nSign up or Login"),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-              child: const Text("Sign in"),
+            Text(
+              "You have not registered!!\nSign up or Login",
+              style: AppTheme.splashStyle
+                  .copyWith(color: Colors.black, fontSize: 18),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const SignUp()));
-              },
-              child: const Text("Sign Up"),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AppButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Login()));
+                },
+                text: "Sign in",
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AppButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const SignUp()));
+                },
+                text: "Sign Up",
+              ),
             ),
           ],
         ),

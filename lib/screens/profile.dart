@@ -7,9 +7,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/text_fields.dart';
-import 'package:news_app_jawan_pakistan/screens/bottomnav.dart';
 import 'package:news_app_jawan_pakistan/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
@@ -133,13 +133,15 @@ class _ProfileState extends State<Profile> {
                           child: Container(
                             height: 100,
                             width: 100,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppTheme.color,
+                              border: Border.all(
+                                  color: const Color(0xffffffff), width: 1),
                             ),
                             child: Center(
                                 child: Text(
-                              "image",
+                              "Add Picture",
                               style: style,
                             )),
                           ),
@@ -208,17 +210,24 @@ class _ProfileState extends State<Profile> {
                     "Payment Type",
                     TextInputType.text,
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   _editMode
-                      ? ElevatedButton(
-                          onPressed: () {
-                            updateProfile(s.data["image"], s.data["payment"]);
-                          },
-                          child: const Text("Update"),
+                      ? Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: AppButton(
+                            text: "Register",
+                            onPressed: () {
+                              updateProfile(s.data["image"], s.data["payment"]);
+                            },
+                          ),
                         )
                       : Container(),
                 ],
               ),
             );
+
           }
           return const Center(
             child: CircularProgressIndicator(),
@@ -231,20 +240,30 @@ class _ProfileState extends State<Profile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("You have not registered!!\nSign up or Login"),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-              child: const Text("Sign in"),
+            Text(
+              "You have not registered!!\nSign up or Login",
+              style: AppTheme.splashStyle
+                  .copyWith(color: Colors.black, fontSize: 18),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const SignUp()));
-              },
-              child: const Text("Sign Up"),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AppButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Login()));
+                },
+                text: "Sign in",
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AppButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const SignUp()));
+                },
+                text: "Sign Up",
+              ),
             ),
           ],
         ),
@@ -253,10 +272,6 @@ class _ProfileState extends State<Profile> {
   }
 
   checkEditMode() async {
-    var style = const TextStyle(
-      color: Color(0xffffffff),
-    );
-
     sharedPreferences = await SharedPreferences.getInstance();
 
     String userID = sharedPreferences.getString("uid") ?? "null";
@@ -266,7 +281,7 @@ class _ProfileState extends State<Profile> {
         children: [
           Text(
             "Edit Mode",
-            style: style.copyWith(fontSize: 8),
+            style: AppTheme.splashStyle.copyWith(fontSize: 8),
           ),
           Switch(
             activeColor: Colors.green,
@@ -303,14 +318,27 @@ class _ProfileState extends State<Profile> {
               }),
         ],
       ),
-      body: FutureBuilder(
-          future: getUserInfo(),
-          builder: (context, s) {
-            if (s.data != null) {
-              return s.data;
-            }
-            return Container();
-          }),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("assets/back.jpg"),
+          fit: BoxFit.cover,
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: FutureBuilder(
+            future: getUserInfo(),
+            builder: (context, s) {
+              if (s.data != null) {
+                return s.data;
+              }
+              return Container();
+            },
+          ),
+        ),
+      ),
     );
   }
 

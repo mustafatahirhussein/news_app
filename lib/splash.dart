@@ -14,19 +14,20 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-
   Duration duration = const Duration(seconds: 4);
   SharedPreferences sharedPreferences;
-
 
   runSplash(BuildContext context) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
     bool check = sharedPreferences.get("did_choice") ?? false;
 
-
     Timer.periodic(duration, (timer) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>  check ? const MainSection() : const Choice()),(Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) =>
+                  check ? const MainSection() : const Choice()),
+          (Route<dynamic> route) => false);
     });
   }
 
@@ -37,12 +38,34 @@ class _SplashState extends State<Splash> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: const Color(0xff260666),
-      body: Center(child: Text("News App",style: AppTheme.splashStyle,)),
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/news.png",
+            height: 150,
+            width: 150,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            "News App",
+            style: AppTheme.splashStyle,
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xffffffff)))
+        ],
+      )),
     );
   }
 }
