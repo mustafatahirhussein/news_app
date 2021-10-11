@@ -1,10 +1,10 @@
 //@dart=2.9
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
-import 'package:news_app_jawan_pakistan/screens/login.dart';
-import 'package:news_app_jawan_pakistan/screens/signup.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'news_detail.dart';
@@ -38,87 +38,95 @@ class _FavouritesState extends State<Favourites> {
           ? Center(
               child: Text(
                 "You have not added any favorites!!",
-                style: AppTheme.splashStyle
-                    .copyWith(color: Colors.black, fontSize: 18),
+                textAlign: TextAlign.center,
+                style: AppTheme.splashStyle.copyWith(fontSize: 24),
               ),
             )
           : ListView.builder(
-              itemCount: favList.length,
+              itemCount: favList.toSet().toList().length,
               itemBuilder: (context, i) {
-                return Card(
-                  elevation: 4,
-                  child: ListTile(
-                    leading: Image.network(
-                      favList[i].urlToImage,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
+                var data = favList.toSet().toList();
+
+                if (favList.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "You have not added any favorites!!",
+                      textAlign: TextAlign.center,
+                      style: AppTheme.splashStyle.copyWith(fontSize: 24),
                     ),
-                    title: Column(
-                      children: [
-                        Text(
-                          favList[i].title,
-                          style: style,
+                  );
+                }
+
+                return Dismissible(
+                  direction: DismissDirection.endToStart,
+                  background: Card(
+                    color: Colors.red[400],
+                    elevation: 4,
+                    child: const Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: FaIcon(
+                          FontAwesomeIcons.trashAlt,
+                          color: Color(0Xffffffff),
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            (-favList[i]
-                                        .publishedAt
-                                        .difference(DateTime.now())
-                                        .inHours)
-                                    .toString() +
-                                " hrs ago",
-                            style: style.copyWith(fontSize: 9),
+                      ),
+                    ),
+                  ),
+                  key: UniqueKey(),
+                  onDismissed: (_) {
+                    setState(() {
+                      favList.removeAt(i);
+                      favCount--;
+                    });
+                  },
+                  child: Card(
+                    elevation: 4,
+                    child: ListTile(
+                      leading: CachedNetworkImage(
+                        imageUrl: data[i].urlToImage,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                        placeholder: (context, _) =>
+                            AppTheme.loader(const Color(0xffffffff)),
+                      ),
+                      title: Column(
+                        children: [
+                          Text(
+                            data[i].title,
+                            style: style,
                           ),
-                        ),
-                      ],
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              (-data[i]
+                                          .publishedAt
+                                          .difference(DateTime.now())
+                                          .inHours)
+                                      .toString() +
+                                  " hrs ago",
+                              style: style.copyWith(fontSize: 9),
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => NewsInfo(
+                                  index: 1,
+                                  article: data[i],
+                                )));
+                      },
                     ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => NewsInfo(
-                                index: 1,
-                                article: favList[i],
-                              )));
-                    },
                   ),
                 );
               },
             );
     }
     if (userID == "null") {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "You have not registered!!\nSign up or Login",
-              style: AppTheme.splashStyle
-                  .copyWith(color: Colors.black, fontSize: 18),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: AppButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const Login()));
-                },
-                text: "Sign in",
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: AppButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const SignUp()));
-                },
-                text: "Sign Up",
-              ),
-            ),
-          ],
-        ),
-      );
+      return RouteMsg.routeAndMessage(context,
+          "You must Sign up or Login to add News in your Favorites feed!!!");
     }
   }
 
@@ -128,16 +136,31 @@ class _FavouritesState extends State<Favourites> {
       appBar: AppBar(
         backgroundColor: AppTheme.color,
         centerTitle: true,
-        title: const Text("Your Favorites"),
+        title: Text(
+          "Your Favorites",
+          style: AppTheme.appBarStyle,
+        ),
       ),
-      body: FutureBuilder(
-          future: getFavorites(),
-          builder: (context, s) {
-            if (s.data != null) {
-              return s.data;
-            }
-            return Container();
-          }),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("assets/back.jpg"),
+          fit: BoxFit.cover,
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FutureBuilder(
+              future: getFavorites(),
+              builder: (context, s) {
+                if (s.data != null) {
+                  return s.data;
+                }
+                return Container();
+              }),
+        ),
+      ),
     );
   }
 }

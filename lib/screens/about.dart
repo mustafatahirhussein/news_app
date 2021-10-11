@@ -11,7 +11,7 @@ class AboutApp extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppTheme.color,
         centerTitle: true,
-        title: const Text("About App"),
+        title:  Text("About App",style: AppTheme.appBarStyle,),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,

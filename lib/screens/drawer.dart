@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
-import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
+import 'package:news_app_jawan_pakistan/screens/login.dart';
+import 'package:news_app_jawan_pakistan/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerContent extends StatefulWidget {
@@ -86,8 +87,8 @@ class _DrawerContentState extends State<DrawerContent> {
                           sharedPreferences.remove("uid");
                           await auth.signOut();
 
-                          Fluttertoast.showToast(
-                              msg: "Signed Out Successfully!");
+                          RouteMsg.msg("Signed Out Successfully!");
+
                           Navigator.pop(context);
                         },
                         text: "LogOut",
@@ -98,9 +99,7 @@ class _DrawerContentState extends State<DrawerContent> {
               ),
             );
           }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return AppTheme.loader(const Color(0xff260666));
         },
       );
     }
@@ -118,53 +117,30 @@ class _DrawerContentState extends State<DrawerContent> {
                 Text(
                   "Login or Register yourself for an awesome experience of News App",
                   textAlign: TextAlign.center,
-                  style: style.copyWith(
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
+                  style: style,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.person,
-                      color: Color(0xffffffff),
-                      size: 50,
-                    ),
-                    label: const Text('Sign Up'),
+                  padding: const EdgeInsets.all(5.0),
+                  child: AppButton(
                     onPressed: () {
-                      setState(() {
-                        favCount++;
-                      });
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Login()));
                     },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        primary: Colors.red),
+                    text: "Sign in",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: AppButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const SignUp()));
+                    },
+                    text: "Sign Up",
                   ),
                 ),
                 const SizedBox(
                   height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.person,
-                      color: Color(0xffffffff),
-                      size: 50,
-                    ),
-                    label: const Text('Sign in'),
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        primary: Colors.red),
-                  ),
                 ),
                 Text(
                   "Flutter PreRequisite Hackathon\nNews App by Jawan Pakistan",

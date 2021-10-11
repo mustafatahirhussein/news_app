@@ -1,20 +1,18 @@
 //@dart=2.9
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/text_fields.dart';
-import 'package:news_app_jawan_pakistan/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
-
-import 'login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key key}) : super(key: key);
@@ -97,11 +95,7 @@ class _ProfileState extends State<Profile> {
             ));
   }
 
-  getUserInfo() async {
-    var style = const TextStyle(
-      color: Color(0xffffffff),
-    );
-
+  getUserInfo(BuildContext context) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
     String userID = sharedPreferences.getString("uid") ?? "null";
@@ -142,7 +136,7 @@ class _ProfileState extends State<Profile> {
                             child: Center(
                                 child: Text(
                               "Add Picture",
-                              style: style,
+                              style: AppTheme.btnStyle,
                             )),
                           ),
                         )
@@ -152,11 +146,13 @@ class _ProfileState extends State<Profile> {
                                 loadImage(context);
                               },
                               child: ClipOval(
-                                child: Image.network(
-                                  s.data["image"],
+                                child: CachedNetworkImage(
+                                  imageUrl: s.data["image"],
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,
+                                  placeholder: (context, _) =>
+                                      AppTheme.loader(const Color(0xffffffff)),
                                 ),
                               ),
                             )
@@ -173,6 +169,9 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ),
                             ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Field.formField(
                     username,
                     "Username",
@@ -217,7 +216,7 @@ class _ProfileState extends State<Profile> {
                       ? Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: AppButton(
-                            text: "Register",
+                            text: "Update",
                             onPressed: () {
                               updateProfile(s.data["image"], s.data["payment"]);
                             },
@@ -227,47 +226,14 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             );
-
           }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return AppTheme.loader(const Color(0xffffffff));
         },
       );
     }
     if (userID == "null") {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "You have not registered!!\nSign up or Login",
-              style: AppTheme.splashStyle
-                  .copyWith(color: Colors.black, fontSize: 18),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: AppButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const Login()));
-                },
-                text: "Sign in",
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: AppButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const SignUp()));
-                },
-                text: "Sign Up",
-              ),
-            ),
-          ],
-        ),
-      );
+      return RouteMsg.routeAndMessage(context,
+          "Become a Member of News App by Signing Up yourself\n or Login");
     }
   }
 
@@ -306,7 +272,10 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         backgroundColor: AppTheme.color,
         centerTitle: true,
-        title: const Text("Profile"),
+        title: Text(
+          "Profile",
+          style: AppTheme.appBarStyle,
+        ),
         actions: [
           FutureBuilder(
               future: checkEditMode(),
@@ -329,7 +298,7 @@ class _ProfileState extends State<Profile> {
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: FutureBuilder(
-            future: getUserInfo(),
+            future: getUserInfo(context),
             builder: (context, s) {
               if (s.data != null) {
                 return s.data;
@@ -357,6 +326,7 @@ class _ProfileState extends State<Profile> {
 
     firebaseFirestore.collection("Users").doc(colID).update(update);
 
-    Fluttertoast.showToast(msg: "Profile updated successfully!");
+    RouteMsg.msg("Profile updated successfully!");
+
   }
 }

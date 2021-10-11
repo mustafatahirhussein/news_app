@@ -5,10 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/text_fields.dart';
 import 'package:news_app_jawan_pakistan/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -128,7 +128,7 @@ class _SignUpState extends State<SignUp> {
           fit: BoxFit.cover,
         )),
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(12.0),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -168,6 +168,9 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                         ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Field.formField(
                     username,
                     "Username",
@@ -205,7 +208,7 @@ class _SignUpState extends State<SignUp> {
                     height: 20,
                   ),
                   Container(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                         border: Border.all(color: const Color(0xffffffff)),
                         borderRadius:
@@ -248,7 +251,7 @@ class _SignUpState extends State<SignUp> {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
-                      text: "Register",
+                      text: "Sign Up",
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           try {
@@ -258,20 +261,24 @@ class _SignUpState extends State<SignUp> {
 
                             if (userCredential.user != null) {
                               createUser(userCredential.user.uid);
-                              Fluttertoast.showToast(
-                                  msg: "Signed Successfully!");
+
+                              RouteMsg.msg("Signed Successfully!");
+
                             }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
                               debugPrint('The password provided is too weak.');
 
-                              Fluttertoast.showToast(msg: "Password is weak");
+                              RouteMsg.msg("Password is weak");
+
+
                             } else if (e.code == 'email-already-in-use') {
                               debugPrint(
                                   'The account already exists for that email.');
 
-                              Fluttertoast.showToast(
-                                  msg: "User already exists");
+                              RouteMsg.msg("User already exists");
+
+
                             }
                           } catch (e) {
                             debugPrint(e);

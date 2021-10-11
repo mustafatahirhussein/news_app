@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.connectionState == ConnectionState.done) {
             return const Splash();
           }
-          return const Center(child: CircularProgressIndicator());
+          return AppTheme.loader(const Color(0xffffffff));
         },
       ),
     );

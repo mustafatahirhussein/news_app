@@ -41,31 +41,40 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff260666),
-      body: Center(
+      // backgroundColor: const Color(0xff260666),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("assets/back.jpg"),
+          fit: BoxFit.cover,
+        )),
+        child: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/news.png",
-            height: 150,
-            width: 150,
-            fit: BoxFit.cover,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/news.png",
+                height: 150,
+                width: 150,
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "News App",
+                style: AppTheme.splashStyle,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              AppTheme.loader(const Color(0xffffffff)),
+            ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            "News App",
-            style: AppTheme.splashStyle,
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xffffffff)))
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
