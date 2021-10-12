@@ -12,8 +12,6 @@ class Choice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -57,17 +55,11 @@ class Choice extends StatelessWidget {
                       child: AppButton(
                         text: "Sign Up",
                         onPressed: () {
-                          // saveBool();
-                          // Navigator.of(context).pushAndRemoveUntil(
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const SignUp()),
-                          //     (Route<dynamic> route) => false);
-
-
-                          Navigator.of(context).push(
+                          saveBool();
+                          Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                  builder: (context) => const SignUp()));
-
+                                  builder: (context) => const SignUp()),
+                              (Route<dynamic> route) => false);
                         },
                       ),
                     ),
@@ -76,15 +68,11 @@ class Choice extends StatelessWidget {
                       child: AppButton(
                         text: "Sign In",
                         onPressed: () {
-                          // saveBool();
-                          // Navigator.of(context).pushAndRemoveUntil(
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Login()),
-                          //     (Route<dynamic> route) => false);
-
-                          Navigator.of(context).push(
+                          saveBool();
+                          Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                  builder: (context) => const Login()));
+                                  builder: (context) => const Login()),
+                              (Route<dynamic> route) => false);
                         },
                       ),
                     ),
