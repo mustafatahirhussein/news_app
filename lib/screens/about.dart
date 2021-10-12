@@ -11,7 +11,10 @@ class AboutApp extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppTheme.color,
         centerTitle: true,
-        title:  Text("About App",style: AppTheme.appBarStyle,),
+        title: Text(
+          "About App",
+          style: AppTheme.appBarStyle,
+        ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -21,10 +24,14 @@ class AboutApp extends StatelessWidget {
           image: AssetImage("assets/back.jpg"),
           fit: BoxFit.cover,
         )),
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Center(
-            child: Text("News App\nA PreRequisite Hackathon by Jawan Pakistan",textAlign: TextAlign.center,style: AppTheme.splashStyle.copyWith(fontSize: 24),),
+            child: Text(
+              "News App\nA PreRequisite Hackathon by Jawan Pakistan",
+              textAlign: TextAlign.center,
+              style: AppTheme.splashStyle.copyWith(fontSize: 24),
+            ),
           ),
         ),
       ),

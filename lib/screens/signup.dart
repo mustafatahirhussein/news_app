@@ -62,21 +62,20 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             image = File(picker.path);
                           });
+                          Navigator.pop(context);
 
                           String fileName = path.basename(image.path);
 
                           Reference firebaseStorageRef =
-                          FirebaseStorage.instance.ref().child(fileName);
+                              FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                          firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
                           setState(() {});
                         }
-
-                        Navigator.pop(context);
                       },
                     ),
                   ),
@@ -92,21 +91,20 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             image = File(picker.path);
                           });
+                          Navigator.pop(context);
 
                           String fileName = path.basename(image.path);
 
                           Reference firebaseStorageRef =
-                          FirebaseStorage.instance.ref().child(fileName);
+                              FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                          firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
                           setState(() {});
                         }
-
-                        Navigator.pop(context);
                       },
                     ),
                   ),
@@ -263,22 +261,17 @@ class _SignUpState extends State<SignUp> {
                               createUser(userCredential.user.uid);
 
                               RouteMsg.msg("Signed Successfully!");
-
                             }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
                               debugPrint('The password provided is too weak.');
 
                               RouteMsg.msg("Password is weak");
-
-
                             } else if (e.code == 'email-already-in-use') {
                               debugPrint(
                                   'The account already exists for that email.');
 
                               RouteMsg.msg("User already exists");
-
-
                             }
                           } catch (e) {
                             debugPrint(e);

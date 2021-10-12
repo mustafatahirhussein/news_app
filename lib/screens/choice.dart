@@ -57,11 +57,17 @@ class Choice extends StatelessWidget {
                       child: AppButton(
                         text: "Sign Up",
                         onPressed: () {
-                          saveBool();
-                          Navigator.of(context).pushAndRemoveUntil(
+                          // saveBool();
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const SignUp()),
+                          //     (Route<dynamic> route) => false);
+
+
+                          Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => const SignUp()),
-                              (Route<dynamic> route) => false);
+                                  builder: (context) => const SignUp()));
+
                         },
                       ),
                     ),
@@ -70,11 +76,15 @@ class Choice extends StatelessWidget {
                       child: AppButton(
                         text: "Sign In",
                         onPressed: () {
-                          saveBool();
-                          Navigator.of(context).pushAndRemoveUntil(
+                          // saveBool();
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const Login()),
+                          //     (Route<dynamic> route) => false);
+
+                          Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => const Login()),
-                              (Route<dynamic> route) => false);
+                                  builder: (context) => const Login()));
                         },
                       ),
                     ),

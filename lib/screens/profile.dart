@@ -44,7 +44,10 @@ class _ProfileState extends State<Profile> {
               content: Wrap(
                 alignment: WrapAlignment.center,
                 children: [
-                  ElevatedButton(
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: AppButton(
+                      text: "Pictures",
                       onPressed: () async {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.gallery);
@@ -53,22 +56,27 @@ class _ProfileState extends State<Profile> {
                           setState(() {
                             image = File(picker.path);
                           });
+                          Navigator.pop(context);
 
                           String fileName = path.basename(image.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
+                          UploadTask uploadTask =
+                              firebaseStorageRef.putFile(image);
+                          TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
                           setState(() {});
                         }
-
-                        Navigator.pop(context);
                       },
-                      child: const Text("Pictures")),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: AppButton(
+                      text: "Camera",
                       onPressed: () async {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.camera);
@@ -77,19 +85,24 @@ class _ProfileState extends State<Profile> {
                           setState(() {
                             image = File(picker.path);
                           });
+                          Navigator.pop(context);
 
                           String fileName = path.basename(image.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
+                          UploadTask uploadTask =
+                              firebaseStorageRef.putFile(image);
+                          TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
                           setState(() {});
                         }
-                        Navigator.pop(context);
                       },
-                      child: const Text("Camera")),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
                 ],
               ),
             ));
@@ -327,6 +340,5 @@ class _ProfileState extends State<Profile> {
     firebaseFirestore.collection("Users").doc(colID).update(update);
 
     RouteMsg.msg("Profile updated successfully!");
-
   }
 }

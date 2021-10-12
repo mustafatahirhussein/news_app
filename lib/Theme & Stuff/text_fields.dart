@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 
 class Field {
-  static Widget formField(TextEditingController controller, String label,TextInputType textInputType) {
+  static Widget formField(TextEditingController controller, String label,
+      TextInputType textInputType) {
     return TextFormField(
       controller: controller,
       keyboardType: textInputType,
       cursorColor: const Color(0xffffffff),
-      style: AppTheme.splashStyle.copyWith(fontSize: 14),
+      style: AppTheme.splashStyle.copyWith(fontSize: 15),
       decoration: InputDecoration(
         errorStyle: AppTheme.splashStyle.copyWith(fontSize: 14),
         labelText: label,
-        focusedBorder:const OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 1.0),
         ),
         labelStyle: AppTheme.splashStyle.copyWith(fontSize: 14),
@@ -26,17 +27,17 @@ class Field {
     );
   }
 
-  static Widget formFieldWithPass(
-      TextEditingController controller, String label, Function onTap,bool visible) {
+  static Widget formFieldWithPass(TextEditingController controller,
+      String label, Function onTap, bool visible) {
     return TextFormField(
       controller: controller,
       obscureText: visible,
       cursorColor: const Color(0xffffffff),
-      style: AppTheme.splashStyle.copyWith(fontSize: 14),
+      style: AppTheme.splashStyle.copyWith(fontSize: 15),
       decoration: InputDecoration(
         errorStyle: AppTheme.splashStyle.copyWith(fontSize: 14),
         labelText: label,
-        focusedBorder:const OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 1.0),
         ),
         labelStyle: AppTheme.splashStyle.copyWith(fontSize: 14),
@@ -46,7 +47,10 @@ class Field {
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         suffixIcon: InkWell(
-          child: Icon(visible ? Icons.visibility_off : Icons.visibility,color: const Color(0xffffffff),),
+          child: Icon(
+            visible ? Icons.visibility_off : Icons.visibility,
+            color: const Color(0xffffffff),
+          ),
           onTap: onTap,
         ),
       ),
