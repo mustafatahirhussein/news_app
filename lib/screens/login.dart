@@ -1,8 +1,8 @@
 //@dart=2.9
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/text_fields.dart';
 import 'package:news_app_jawan_pakistan/screens/bottomnav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
           fit: BoxFit.cover,
         )),
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(12.0),
           child: Form(
             key: _formKey,
             child: Center(
@@ -69,8 +69,8 @@ class _LoginState extends State<Login> {
                               sharedPreferences.setString(
                                   "uid", userCredential.user.uid);
 
-                              Fluttertoast.showToast(
-                                  msg: "Logged In Successfully!");
+                              RouteMsg.msg("Logged In Successfully!");
+
                             }
 
                             Navigator.of(context).pushAndRemoveUntil(
@@ -79,14 +79,17 @@ class _LoginState extends State<Login> {
                                 (Route<dynamic> route) => false);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'user-not-found') {
-                              Fluttertoast.showToast(msg: "User not found");
+
+                              RouteMsg.msg("User not found");
+
 
                               debugPrint('No user found for that email.');
                             } else if (e.code == 'wrong-password') {
                               debugPrint(
                                   'Wrong password provided for that user.');
 
-                              Fluttertoast.showToast(msg: "Wrong Password");
+
+                              RouteMsg.msg("Wrong Password");
                             }
                           }
                         }

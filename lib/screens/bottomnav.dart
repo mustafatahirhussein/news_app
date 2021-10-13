@@ -1,6 +1,7 @@
 //@dart=2.9
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
 import 'package:news_app_jawan_pakistan/screens/favourite.dart';
@@ -41,11 +42,11 @@ class _MainSectionState extends State<MainSection> {
           favCount.toString(),
           style: const TextStyle(color: Color(0xffffffff)),
         ),
-        child: const Icon(Icons.favorite),
+        child: const FaIcon(FontAwesomeIcons.solidHeart),
       );
     }
     if (userStatus == "null") {
-      return const Icon(Icons.favorite);
+      return const FaIcon(FontAwesomeIcons.solidHeart);
     }
   }
 
@@ -65,21 +66,22 @@ class _MainSectionState extends State<MainSection> {
       child: Scaffold(
         body: tabList[index],
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: true,
           selectedItemColor: AppTheme.color,
           unselectedItemColor: Colors.grey,
           iconSize: 26,
           currentIndex: index,
-          unselectedLabelStyle: const TextStyle(
-            color: Colors.grey,
-          ),
-          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          unselectedLabelStyle:
+              AppTheme.appBarStyle.copyWith(fontSize: 15, color: Colors.grey),
+          selectedLabelStyle: AppTheme.appBarStyle
+              .copyWith(fontSize: 15, color: AppTheme.color),
+          showUnselectedLabels: false,
           elevation: 5,
           enableFeedback: true,
           items: [
             const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home_filled,
-              ),
+              icon: FaIcon(FontAwesomeIcons.home),
               label: 'Home',
             ),
             BottomNavigationBarItem(
@@ -96,15 +98,11 @@ class _MainSectionState extends State<MainSection> {
               label: 'Favourites',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-              ),
+              icon: FaIcon(FontAwesomeIcons.userAlt),
               label: 'Profile',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.info,
-              ),
+              icon: FaIcon(FontAwesomeIcons.infoCircle),
               label: 'Info',
             ),
           ],

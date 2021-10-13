@@ -1,4 +1,5 @@
 //@dart=2.9
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/model_class/news_model.dart';
@@ -25,12 +26,14 @@ class NewsInfo extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              article.urlToImage ??
+            CachedNetworkImage(
+              imageUrl: article.urlToImage ??
                   "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
               width: double.infinity,
               height: 270,
               fit: BoxFit.cover,
+              placeholder: (context, _) =>
+                  AppTheme.loader(const Color(0xff260666)),
             ),
             Padding(
               padding: const EdgeInsets.all(3.0),
@@ -39,11 +42,9 @@ class NewsInfo extends StatelessWidget {
                 style: style.copyWith(fontSize: 13),
               ),
             ),
-
             const SizedBox(
               height: 20,
             ),
-
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: Text(
@@ -90,7 +91,6 @@ class NewsInfo extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: Text(

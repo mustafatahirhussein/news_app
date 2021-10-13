@@ -1,9 +1,12 @@
 //@dart=2.9
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/random.dart';
+import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/route_and_message.dart';
 import 'package:news_app_jawan_pakistan/model_class/news_model.dart';
 import 'package:news_app_jawan_pakistan/screens/drawer.dart';
 import 'package:news_app_jawan_pakistan/screens/news_detail.dart';
@@ -74,30 +77,46 @@ class _HomePageState extends State<HomePage> {
           child: AppBar(
             backgroundColor: AppTheme.color,
             centerTitle: true,
-            title: const Text("News App"),
+            title: Text(
+              "News App",
+              style: AppTheme.splashStyle.copyWith(fontSize: 24),
+            ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.search),
+                icon: const FaIcon(
+                  FontAwesomeIcons.search,
+                  size: 20,
+                ),
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const SearchNews()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const SearchNews()));
                 },
               ),
               PopupMenuButton<int>(
+                icon: const FaIcon(
+                  FontAwesomeIcons.ellipsisV,
+                  size: 20,
+                ),
                 onSelected: (item) => handleClick(item),
                 itemBuilder: (context) => [
                   const PopupMenuItem<int>(value: 0, child: Text('Exit App')),
                 ],
               ),
             ],
-            bottom: const TabBar(
-              indicatorColor: Color(0xffffffff),
+            bottom: TabBar(
+              indicatorColor: const Color(0xffffffff),
               tabs: [
                 Tab(
-                  child: Text("Top Stories"),
+                  child: Text(
+                    "Top Stories",
+                    style: AppTheme.appBarStyle,
+                  ),
                 ),
                 Tab(
-                  child: Text("News"),
+                  child: Text(
+                    "News",
+                    style: AppTheme.appBarStyle,
+                  ),
                 ),
               ],
             ),
@@ -120,11 +139,14 @@ class _HomePageState extends State<HomePage> {
                       return Card(
                         elevation: 4,
                         child: ListTile(
-                          leading: Image.network(
-                            data[i].urlToImage ?? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
+                          leading: CachedNetworkImage(
+                            imageUrl: data[i].urlToImage ??
+                                "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
+                            fit: BoxFit.cover,
                             height: 100,
                             width: 100,
-                            fit: BoxFit.cover,
+                            placeholder: (context, _) =>
+                                AppTheme.loader(const Color(0xff260666)),
                           ),
                           title: Column(
                             children: [
@@ -154,14 +176,22 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.topRight,
                                     child: InkWell(
                                       onTap: () {
-                                        favList.add(data[i]);
+                                        RouteMsg.userExistCheck().then((value) {
+                                          if (value == "null") {
+                                            RouteMsg.msg(
+                                                "Sign up or Login to add this news in fav");
+                                          }
+                                          if (value != "null") {
+                                            favList.add(data[i]);
 
-                                        setState(() {
-                                          favCount++;
+                                            setState(() {
+                                              favCount++;
+                                            });
+                                          }
                                         });
                                       },
-                                      child: const Icon(
-                                        Icons.favorite,
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.solidHeart,
                                         size: 20,
                                         color: AppTheme.color,
                                       ),
@@ -183,9 +213,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return AppTheme.loader(const Color(0xff260666));
               },
             ),
 
@@ -204,11 +232,14 @@ class _HomePageState extends State<HomePage> {
                       return Card(
                         elevation: 4,
                         child: ListTile(
-                          leading: Image.network(
-                            data[i].urlToImage ?? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
+                          leading: CachedNetworkImage(
+                            imageUrl: data[i].urlToImage ??
+                                "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
+                            fit: BoxFit.cover,
                             height: 100,
                             width: 100,
-                            fit: BoxFit.cover,
+                            placeholder: (context, _) =>
+                                AppTheme.loader(const Color(0xff260666)),
                           ),
                           title: Column(
                             children: [
@@ -238,13 +269,22 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.topRight,
                                     child: InkWell(
                                       onTap: () {
-                                        favList.add(data[i]);
-                                        setState(() {
-                                          favCount++;
+                                        RouteMsg.userExistCheck().then((value) {
+                                          if (value == "null") {
+                                            RouteMsg.msg(
+                                                "Sign up or Login to add this news in fav");
+                                          }
+                                          if (value != "null") {
+                                            favList.add(data[i]);
+
+                                            setState(() {
+                                              favCount++;
+                                            });
+                                          }
                                         });
                                       },
-                                      child: const Icon(
-                                        Icons.favorite,
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.solidHeart,
                                         size: 20,
                                         color: AppTheme.color,
                                       ),
@@ -266,9 +306,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return AppTheme.loader(const Color(0xff260666));
               },
             ),
           ],
