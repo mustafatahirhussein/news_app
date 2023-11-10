@@ -1,5 +1,5 @@
-//@dart=2.9
 import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as b;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'about.dart';
 
 class MainSection extends StatefulWidget {
-  const MainSection({Key key}) : super(key: key);
+  const MainSection({Key? key}) : super(key: key);
 
   @override
   _MainSectionState createState() => _MainSectionState();
@@ -20,7 +20,7 @@ class MainSection extends StatefulWidget {
 
 class _MainSectionState extends State<MainSection> {
   int index = 0;
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   var tabList = [
     const HomePage(),
@@ -32,10 +32,10 @@ class _MainSectionState extends State<MainSection> {
   userSignedIn() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    String userStatus = sharedPreferences.get('uid') ?? "null";
+    String userStatus = sharedPreferences.getString('uid') ?? "null";
 
     if (userStatus != "null") {
-      return Badge(
+      return b.Badge(
         badgeColor: AppTheme.color,
         stackFit: StackFit.loose,
         badgeContent: Text(
@@ -61,7 +61,7 @@ class _MainSectionState extends State<MainSection> {
         } else {
           Future.value(false);
         }
-        return null;
+        return Future.value(false);
       },
       child: Scaffold(
         body: tabList[index],
@@ -89,7 +89,7 @@ class _MainSectionState extends State<MainSection> {
                 future: userSignedIn(),
                 builder: (context, s) {
                   if (s.data != null) {
-                    return s.data;
+                    return s.data as Widget;
                   } else {
                     return Container();
                   }

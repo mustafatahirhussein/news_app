@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,16 +10,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'news_detail.dart';
 
 class Favourites extends StatefulWidget {
-  final VoidCallback onP1Badge;
+  final VoidCallback? onP1Badge;
 
-  const Favourites({Key key, this.onP1Badge}) : super(key: key);
+  const Favourites({Key? key, this.onP1Badge}) : super(key: key);
 
   @override
   _FavouritesState createState() => _FavouritesState();
 }
 
 class _FavouritesState extends State<Favourites> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   getFavorites() async {
     var style = const TextStyle(
@@ -155,7 +155,7 @@ class _FavouritesState extends State<Favourites> {
               future: getFavorites(),
               builder: (context, s) {
                 if (s.data != null) {
-                  return s.data;
+                  return s.data as Widget;
                 }
                 return Container();
               }),

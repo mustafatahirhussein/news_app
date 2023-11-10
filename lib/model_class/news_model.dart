@@ -2,7 +2,6 @@
 //
 //     final news = newsFromJson(jsonString);
 
-//@dart=2.9
 import 'dart:convert';
 
 News newsFromJson(String str) => News.fromJson(json.decode(str));
@@ -16,9 +15,9 @@ class News {
     this.articles,
   });
 
-  String status;
-  int totalResults;
-  List<Article> articles;
+  String? status;
+  int? totalResults;
+  List<Article>? articles;
 
   factory News.fromJson(Map<String, dynamic> json) => News(
     status: json["status"],
@@ -29,7 +28,7 @@ class News {
   Map<String, dynamic> toJson() => {
     "status": status,
     "totalResults": totalResults,
-    "articles": List<dynamic>.from(articles.map((x) => x.toJson())),
+    "articles": List<dynamic>.from(articles!.map((x) => x.toJson())),
   };
 }
 
@@ -45,14 +44,14 @@ class Article {
     this.content,
   });
 
-  Source source;
-  String author;
-  String title;
-  String description;
-  String url;
-  String urlToImage;
-  DateTime publishedAt;
-  String content;
+  Source? source;
+  String? author;
+  String? title;
+  String? description;
+  String? url;
+  String? urlToImage;
+  DateTime? publishedAt;
+  String? content;
 
   factory Article.fromJson(Map<String, dynamic> json) => Article(
     source: Source.fromJson(json["source"]),
@@ -66,13 +65,13 @@ class Article {
   );
 
   Map<String, dynamic> toJson() => {
-    "source": source.toJson(),
+    "source": source!.toJson(),
     "author": author,
     "title": title,
     "description": description,
     "url": url,
     "urlToImage": urlToImage,
-    "publishedAt": publishedAt.toIso8601String(),
+    "publishedAt": publishedAt!.toIso8601String(),
     "content": content,
   };
 }
@@ -83,8 +82,8 @@ class Source {
     this.name,
   });
 
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   factory Source.fromJson(Map<String, dynamic> json) => Source(
     id: json["id"],

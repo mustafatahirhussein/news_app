@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,14 +15,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
 
 class Profile extends StatefulWidget {
-  const Profile({Key key}) : super(key: key);
+  const Profile({Key? key}) : super(key: key);
 
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
 
   bool _editMode = false;
 
-  File image;
+  File? image;
   String url = "";
 
   loadImage(BuildContext context) async {
@@ -52,19 +52,19 @@ class _ProfileState extends State<Profile> {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.gallery);
 
-                        if (picker.path.isNotEmpty) {
+                        if (picker!.path.isNotEmpty) {
                           setState(() {
                             image = File(picker.path);
                           });
                           Navigator.pop(context);
 
-                          String fileName = path.basename(image.path);
+                          String fileName = path.basename(image!.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                              firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image!);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
@@ -81,19 +81,19 @@ class _ProfileState extends State<Profile> {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.camera);
 
-                        if (picker.path.isNotEmpty) {
+                        if (picker!.path.isNotEmpty) {
                           setState(() {
                             image = File(picker.path);
                           });
                           Navigator.pop(context);
 
-                          String fileName = path.basename(image.path);
+                          String fileName = path.basename(image!.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                              firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image!);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
@@ -114,25 +114,26 @@ class _ProfileState extends State<Profile> {
     String userID = sharedPreferences.getString("uid") ?? "null";
 
     //Document ID
-    String colID = sharedPreferences.getString("col_id");
+    String? colID = sharedPreferences.getString("col_id");
 
     if (userID != "null") {
-      return StreamBuilder(
+
+      return StreamBuilder<DocumentSnapshot>(
         stream: firebaseFirestore.collection("Users").doc(colID).snapshots(),
         builder: (context, s) {
           if (s.data != null) {
-            username.text = s.data["username"];
-            email.text = s.data["email"];
-            address.text = s.data["address"];
-            cnt.text = s.data["cnt"];
+            username.text = s.data!["username"];
+            email.text = s.data!["email"];
+            address.text = s.data!["address"];
+            cnt.text = s.data!["cnt"];
 
-            pay.text = s.data["payment"];
+            pay.text = s.data!["payment"];
 
             return SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  s.data["image"].isEmpty
+                  s.data!["image"].isEmpty
                       ? InkWell(
                           onTap: () {
                             loadImage(context);
@@ -160,7 +161,7 @@ class _ProfileState extends State<Profile> {
                               },
                               child: ClipOval(
                                 child: CachedNetworkImage(
-                                  imageUrl: s.data["image"],
+                                  imageUrl: s.data!["image"],
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,
@@ -175,7 +176,7 @@ class _ProfileState extends State<Profile> {
                               },
                               child: ClipOval(
                                 child: Image.file(
-                                  image,
+                                  image!,
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,
@@ -231,7 +232,7 @@ class _ProfileState extends State<Profile> {
                           child: AppButton(
                             text: "Update",
                             onPressed: () {
-                              updateProfile(s.data["image"], s.data["payment"]);
+                              updateProfile(s.data!["image"], s.data!["payment"]);
                             },
                           ),
                         )
@@ -294,7 +295,7 @@ class _ProfileState extends State<Profile> {
               future: checkEditMode(),
               builder: (context, s) {
                 if (s.data != null) {
-                  return s.data;
+                  return s.data as Widget ;
                 }
                 return Container();
               }),
@@ -314,7 +315,7 @@ class _ProfileState extends State<Profile> {
             future: getUserInfo(context),
             builder: (context, s) {
               if (s.data != null) {
-                return s.data;
+                return s.data as Widget;
               }
               return Container();
             },
@@ -327,7 +328,7 @@ class _ProfileState extends State<Profile> {
   updateProfile(String image, String payment) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    String colID = sharedPreferences.getString("col_id");
+    String? colID = sharedPreferences.getString("col_id");
 
     Map<String, dynamic> update = {
       "image": url.isEmpty ? image : url,

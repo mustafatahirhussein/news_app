@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,14 +13,14 @@ import 'package:news_app_jawan_pakistan/screens/news_detail.dart';
 import 'package:news_app_jawan_pakistan/screens/search.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  Future stories, news;
+  late Future stories, news;
 
   getNews() async {
     try {
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        drawer: const DrawerContent(),
+        drawer: DrawerContent(),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(100),
           child: AppBar(
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SearchNews()));
+                      builder: (context) => SearchNews()));
                 },
               ),
               PopupMenuButton<int>(

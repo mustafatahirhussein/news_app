@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'news_detail.dart';
 
 class SearchNews extends StatefulWidget {
-  const SearchNews({Key key}) : super(key: key);
+  const SearchNews({Key? key}) : super(key: key);
 
   @override
   _SearchNewsState createState() => _SearchNewsState();
@@ -42,8 +42,8 @@ class _SearchNewsState extends State<SearchNews> {
     // TODO: implement initState
     getTopStories().then((value) {
       setState(() {
-        debugPrint("data val" + value.articles.length.toString());
-        for (int i = 0; i < value.articles.length; i++) {
+        debugPrint("data val" + value.articles!.length.toString());
+        for (int i = 0; i < value.articles!.length; i++) {
           news.add(value);
           searchNews = news;
         }
@@ -89,22 +89,22 @@ class _SearchNewsState extends State<SearchNews> {
                     debugPrint("working");
 
                     searchNews = news.where((u) {
-                      for (int i = 0; i < u.articles.length; i++) {
+                      for (int i = 0; i < u.articles!.length; i++) {
                         return (u.articles
-                                .elementAt(i)
+                                !.elementAt(i)
                                 .title
-                                .toLowerCase()
+                                !.toLowerCase()
                                 .contains(searchCnt.text.toLowerCase())) ||
                             (u.articles
-                                .elementAt(i)
+                                !.elementAt(i)
                                 .source
-                                .name
-                                .toLowerCase()
+                                !.name
+                                !.toLowerCase()
                                 .contains(searchCnt.text.toLowerCase())) ||
                             (u.articles
-                                .elementAt(i)
+                                !.elementAt(i)
                                 .author
-                                .toLowerCase()
+                                !.toLowerCase()
                                 .contains(searchCnt.text.toLowerCase()));
                       }
                       return true;
@@ -124,7 +124,7 @@ class _SearchNewsState extends State<SearchNews> {
                   elevation: 4,
                   child: ListTile(
                     leading: CachedNetworkImage(
-                      imageUrl: news[i].articles[i].urlToImage ??
+                      imageUrl: news[i].articles![i].urlToImage ??
                           "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
                       height: 100,
                       width: 100,
@@ -135,16 +135,16 @@ class _SearchNewsState extends State<SearchNews> {
                     title: Column(
                       children: [
                         Text(
-                          news[i].articles[i].title,
+                          news[i].articles![i].title!,
                           style: style,
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Text(
                             (-news[i]
-                                        .articles[i]
+                                        .articles![i]
                                         .publishedAt
-                                        .difference(DateTime.now())
+                                        !.difference(DateTime.now())
                                         .inHours)
                                     .toString() +
                                 " hrs ago",
@@ -157,7 +157,7 @@ class _SearchNewsState extends State<SearchNews> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => NewsInfo(
                                 index: 0,
-                                article: news[i].articles[i],
+                                article: news[i].articles![i],
                               )));
                     },
                   ),
@@ -173,7 +173,7 @@ class _SearchNewsState extends State<SearchNews> {
                       elevation: 4,
                       child: ListTile(
                         leading: CachedNetworkImage(
-                          imageUrl: searchNews[i].articles[i].urlToImage ??
+                          imageUrl: searchNews[i].articles![i].urlToImage ??
                               "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png",
                           height: 100,
                           width: 100,
@@ -184,16 +184,16 @@ class _SearchNewsState extends State<SearchNews> {
                         title: Column(
                           children: [
                             Text(
-                              searchNews[i].articles[i].title,
+                              searchNews[i].articles![i].title!,
                               style: style,
                             ),
                             Align(
                               alignment: Alignment.bottomRight,
                               child: Text(
                                 (-searchNews[i]
-                                            .articles[i]
+                                            .articles![i]
                                             .publishedAt
-                                            .difference(DateTime.now())
+                                            !.difference(DateTime.now())
                                             .inHours)
                                         .toString() +
                                     " hrs ago",
@@ -206,7 +206,7 @@ class _SearchNewsState extends State<SearchNews> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => NewsInfo(
                                     index: 0,
-                                    article: searchNews[i].articles[i],
+                                    article: searchNews[i].articles![i],
                                   )));
                         },
                       ),

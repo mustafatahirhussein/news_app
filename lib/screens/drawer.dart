@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
@@ -13,14 +12,14 @@ import 'package:news_app_jawan_pakistan/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerContent extends StatefulWidget {
-  const DrawerContent({Key key}) : super(key: key);
+  const DrawerContent({Key? key}) : super(key: key);
 
   @override
   _DrawerContentState createState() => _DrawerContentState();
 }
 
 class _DrawerContentState extends State<DrawerContent> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -33,10 +32,10 @@ class _DrawerContentState extends State<DrawerContent> {
     String userID = sharedPreferences.getString("uid") ?? "null";
 
     //Document ID
-    String colID = sharedPreferences.getString("col_id");
+    String? colID = sharedPreferences.getString("col_id");
 
     if (userID != "null") {
-      return StreamBuilder(
+      return StreamBuilder<DocumentSnapshot>(
         stream: firebaseFirestore.collection("Users").doc(colID).snapshots(),
         builder: (context, s) {
           if (s.hasData) {
@@ -56,9 +55,9 @@ class _DrawerContentState extends State<DrawerContent> {
                       Center(
                         child: ClipOval(
                           child: CachedNetworkImage(
-                            imageUrl: s.data["image"].isEmpty
+                            imageUrl: s.data!["image"].isEmpty
                                 ? "https://www.wpclipart.com/people/faces/anonymous/photo_not_available_BW.png"
-                                : s.data["image"],
+                                : s.data!["image"],
                             height: 150,
                             width: 150,
                             fit: BoxFit.cover,
@@ -71,7 +70,7 @@ class _DrawerContentState extends State<DrawerContent> {
                         height: 30,
                       ),
                       Text(
-                        s.data["username"],
+                        s.data!["username"],
                         textAlign: TextAlign.center,
                         style: style.copyWith(
                             fontSize: 22, fontStyle: FontStyle.italic),
@@ -192,7 +191,7 @@ class _DrawerContentState extends State<DrawerContent> {
         future: getCurrentUser(),
         builder: (context, s) {
           if (s.data != null) {
-            return s.data;
+            return s.data as Widget;
           }
           return Container();
         });

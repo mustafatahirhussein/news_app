@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
@@ -7,7 +6,7 @@ import 'package:news_app_jawan_pakistan/screens/choice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
-  const Splash({Key key}) : super(key: key);
+  const Splash({Key? key}) : super(key: key);
 
   @override
   _SplashState createState() => _SplashState();
@@ -15,12 +14,12 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   Duration duration = const Duration(seconds: 4);
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   runSplash(BuildContext context) async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    bool check = sharedPreferences.get("did_choice") ?? false;
+    bool? check = sharedPreferences.getBool("did_choice") ?? false;
 
     Timer.periodic(duration, (timer) {
       Navigator.of(context).pushAndRemoveUntil(

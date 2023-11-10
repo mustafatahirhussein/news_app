@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_btn.dart';
@@ -8,7 +8,7 @@ import 'package:news_app_jawan_pakistan/screens/bottomnav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
 
   bool _isVisible = true;
 
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
                     child: AppButton(
                       text: "Sign In",
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           try {
                             UserCredential userCredential =
                                 await auth.signInWithEmailAndPassword(
@@ -67,7 +67,7 @@ class _LoginState extends State<Login> {
                                   await SharedPreferences.getInstance();
 
                               sharedPreferences.setString(
-                                  "uid", userCredential.user.uid);
+                                  "uid", userCredential.user!.uid);
 
                               RouteMsg.msg("Logged In Successfully!");
 

@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
@@ -8,7 +8,7 @@ class NewsInfo extends StatelessWidget {
   final Article article;
   final int index;
 
-  const NewsInfo({Key key, this.article, this.index}) : super(key: key);
+  const NewsInfo({Key? key, required this.article, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class NewsInfo extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: Text(
-                article.description,
+                article.description!,
                 style: style.copyWith(fontSize: 13),
               ),
             ),
@@ -48,7 +48,7 @@ class NewsInfo extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: Text(
-                article.title,
+                article.title!,
                 style: style.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -57,7 +57,7 @@ class NewsInfo extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(2.5),
                 child: Text(
-                  article.author == null ? '' : "By " + article.author,
+                  article.author == null ? '' : "By " + article.author!,
                   style: style.copyWith(fontSize: 12),
                 ),
               ),
@@ -67,7 +67,7 @@ class NewsInfo extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    (-article.publishedAt.difference(DateTime.now()).inHours)
+                    (-article.publishedAt!.difference(DateTime.now()).inHours)
                             .toString() +
                         " hrs ago",
                     style: style.copyWith(fontSize: 12),
@@ -80,7 +80,7 @@ class NewsInfo extends StatelessWidget {
                       color: const Color(0xff000000),
                     ),
                   ),
-                  Text(article.source.name),
+                  Text(article.source!.name!),
                 ],
               ),
             ),

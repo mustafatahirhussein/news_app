@@ -23,12 +23,12 @@ class Field {
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
       ),
-      validator: (val) => val.isEmpty ? "Empty" : null,
+      validator: (val) => val!.isEmpty ? "Empty" : null,
     );
   }
 
   static Widget formFieldWithPass(TextEditingController controller,
-      String label, Function onTap, bool visible) {
+      String label, VoidCallback onTap, bool visible) {
     return TextFormField(
       controller: controller,
       obscureText: visible,
@@ -54,7 +54,7 @@ class Field {
           onTap: onTap,
         ),
       ),
-      validator: (val) => val.isEmpty ? "Empty" : null,
+      validator: (val) => val!.isEmpty ? "Empty" : null,
     );
   }
 }

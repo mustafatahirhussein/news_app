@@ -3,11 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_app_jawan_pakistan/Theme%20&%20Stuff/app_theme.dart';
 
 class AppButton extends StatelessWidget {
-  final Function onPressed;
+  final VoidCallback onPressed;
   final String text;
-  final IconData icon;
+  final IconData? icon;
 
-  const AppButton({Key key, this.onPressed, this.text, this.icon})
+  const AppButton({Key? key, required this.onPressed, required this.text, this.icon})
       : super(key: key);
 
   @override

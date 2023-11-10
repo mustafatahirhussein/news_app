@@ -1,4 +1,4 @@
-//@dart=2.9
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key key}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -32,14 +32,14 @@ class _SignUpState extends State<SignUp> {
   String paymentOpt = "Cash";
   var items = ["Cash", "Credit", "Debit", "Cheque"];
 
-  File image;
+  File? image;
   bool _isVisible = true;
 
   final _formKey = GlobalKey<FormState>();
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  UserCredential userCredential;
-  SharedPreferences sharedPreferences;
+  UserCredential? userCredential;
+  late SharedPreferences sharedPreferences;
 
   String url = "";
 
@@ -58,19 +58,19 @@ class _SignUpState extends State<SignUp> {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.gallery);
 
-                        if (picker.path.isNotEmpty) {
+                        if (picker!.path.isNotEmpty) {
                           setState(() {
                             image = File(picker.path);
                           });
                           Navigator.pop(context);
 
-                          String fileName = path.basename(image.path);
+                          String fileName = path.basename(image!.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                              firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image!);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
@@ -87,19 +87,19 @@ class _SignUpState extends State<SignUp> {
                         var picker = await ImagePicker()
                             .pickImage(source: ImageSource.camera);
 
-                        if (picker.path.isNotEmpty) {
+                        if (picker!.path.isNotEmpty) {
                           setState(() {
                             image = File(picker.path);
                           });
                           Navigator.pop(context);
 
-                          String fileName = path.basename(image.path);
+                          String fileName = path.basename(image!.path);
 
                           Reference firebaseStorageRef =
                               FirebaseStorage.instance.ref().child(fileName);
 
                           UploadTask uploadTask =
-                              firebaseStorageRef.putFile(image);
+                              firebaseStorageRef.putFile(image!);
                           TaskSnapshot taskSnapshot = await uploadTask;
                           url = await firebaseStorageRef.getDownloadURL();
 
@@ -159,7 +159,7 @@ class _SignUpState extends State<SignUp> {
                           },
                           child: ClipOval(
                             child: Image.file(
-                              image,
+                              image!,
                               height: 100,
                               width: 100,
                               fit: BoxFit.cover,
@@ -238,7 +238,7 @@ class _SignUpState extends State<SignUp> {
                       }).toList(),
                       onChanged: (val) {
                         setState(() {
-                          paymentOpt = val;
+                          paymentOpt = val.toString();
                         });
                       },
                     ),
@@ -251,14 +251,14 @@ class _SignUpState extends State<SignUp> {
                     child: AppButton(
                       text: "Sign Up",
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           try {
                             userCredential =
                                 await auth.createUserWithEmailAndPassword(
                                     email: email.text, password: pass.text);
 
-                            if (userCredential.user != null) {
-                              createUser(userCredential.user.uid);
+                            if (userCredential!.user != null) {
+                              createUser(userCredential!.user!.uid);
 
                               RouteMsg.msg("Signed Successfully!");
                             }
@@ -274,7 +274,7 @@ class _SignUpState extends State<SignUp> {
                               RouteMsg.msg("User already exists");
                             }
                           } catch (e) {
-                            debugPrint(e);
+                            debugPrint(e.toString());
                           }
                         }
                       },
