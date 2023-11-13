@@ -36,7 +36,9 @@ class _MainSectionState extends State<MainSection> {
 
     if (userStatus != "null") {
       return b.Badge(
-        badgeColor: AppTheme.color,
+        badgeStyle: b.BadgeStyle(
+          badgeColor: AppTheme.color,
+        ),
         stackFit: StackFit.loose,
         badgeContent: Text(
           favCount.toString(),
